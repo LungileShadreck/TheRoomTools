@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Room Design Firm — Business Strategy</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0e0d0b">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .card-title { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 4px; }
+  .card-value { font-size: 22px; font-weight: 500; color: var(--color-text-primary); }
+  .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .label { font-size: 13px; color: var(--color-text-secondary); }
+  .value { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+  .row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .row:last-child { border-bottom: none; }
+  .industry-row { padding: 10px 12px; border-radius: var(--border-radius-md); background: var(--color-background-secondary); margin-bottom: 8px; }
+  .industry-name { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+  .industry-meta { font-size: 12px; color: var(--color-text-secondary); }
+  .pitch-step { padding: 12px 14px; border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; border-left: 3px solid; margin-bottom: 10px; cursor: pointer; background: var(--color-background-secondary); }
+  .pitch-step:hover { opacity: .85; }
+  .step-num { font-size: 11px; font-weight: 500; margin-bottom: 3px; }
+  .step-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .step-body { font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; max-height: 0; overflow: hidden; transition: max-height .3s ease; }
+  .pitch-step.open .step-body { max-height: 300px; }
+  .pkg { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 14px 16px; margin-bottom: 10px; background: var(--color-background-primary); }
+  .pkg.featured { border-color: var(--color-border-info); border-width: 1.5px; }
+  .pkg-name { font-size: 15px; font-weight: 500; margin-bottom: 2px; }
+  .pkg-price { font-size: 22px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 8px; }
+  .pkg-price span { font-size: 13px; font-weight: 400; color: var(--color-text-secondary); }
+  .pkg-item { font-size: 13px; color: var(--color-text-secondary); padding: 3px 0; display: flex; gap: 6px; }
+  .check { color: var(--color-text-success); font-size: 12px; }
+  .week-row { display: flex; gap: 10px; margin-bottom: 8px; align-items: flex-start; }
+  .week-num { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 4px 10px; font-size: 12px; font-weight: 500; white-space: nowrap; margin-top: 2px; }
+  .week-content { flex: 1; }
+  .week-title { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+  .week-tasks { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
+  .objection { border-radius: var(--border-radius-md); padding: 10px 14px; margin-bottom: 8px; background: var(--color-background-secondary); cursor: pointer; }
+  .obj-q { font-size: 13px; font-weight: 500; display: flex; justify-content: space-between; align-items: center; }
+  .obj-a { font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; max-height: 0; overflow: hidden; transition: max-height .3s ease; }
+  .objection.open .obj-a { max-height: 200px; padding-top: 8px; }
+</style>
+
+<body>
+<div class="grain-overlay"></div>
+<div class="container">
+  <a href="index.html" class="back-link">← Back to Tools</a>
+  <h1>The Room Design Firm</h1>
+  <p class="subtitle">30-day business &amp; client strategy dashboard</p>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('tracker',this)">Revenue tracker</button>
+    <button class="tab" onclick="showTab('industries',this)">Target industries</button>
+    <button class="tab" onclick="showTab('pricing',this)">Pricing</button>
+    <button class="tab" onclick="showTab('pitch',this)">Pitch framework</button>
+    <button class="tab" onclick="showTab('plan',this)">30-day plan</button>
+    <button class="tab" onclick="showTab('objections',this)">Objections</button>
+  </div>
+
+  <div id="tab-tracker" class="panel active">
+    <div class="grid3">
+      <div class="card"><div class="card-title">Current MRR</div><div class="card-value" id="mrr">BWP 500</div></div>
+      <div class="card"><div class="card-title">Target MRR</div><div class="card-value">BWP 5,000</div></div>
+      <div class="card"><div class="card-title">Gap to close</div><div class="card-value" id="gap">BWP 4,500</div></div>
+    </div>
+    <div class="card">
+      <div style="font-size:14px;font-weight:500;margin-bottom:12px">Client pipeline</div>
+      <div id="client-list"></div>
+      <button onclick="addClient()" style="margin-top:10px;font-size:13px;padding:6px 14px;border-radius:var(--border-radius-md);border:0.5px dashed var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;width:100%">+ Add client</button>
+    </div>
+    <div class="card">
+      <div style="font-size:14px;font-weight:500;margin-bottom:10px">30-day target progress</div>
+      <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:4px">Goal: 3 clients at BWP 1,500+ each</div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:10%"></div></div>
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-top:6px" id="progress-label">1 of 3 clients · BWP 500 of 4,500 target</div>
+    </div>
+  </div>
+
+  <div id="tab-industries" class="panel">
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:14px">Ranked by conversion likelihood in Francistown — focus top 3 first.</div>
+    <div id="industry-list"></div>
+  </div>
+
+  <div id="tab-pricing" class="panel">
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:14px">Three tiers. The middle package is your main pitch — it anchors the conversation and makes BWP 1,500 feel like the obvious choice.</div>
+    <div class="pkg">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <div class="pkg-name">Starter</div><span class="badge badge-warn">Upsell target</span>
+      </div>
+      <div class="pkg-price">BWP 800 <span>/ month</span></div>
+      <div class="pkg-item"><span class="check">✓</span>Logo + brand colours</div>
+      <div class="pkg-item"><span class="check">✓</span>1 social media template set</div>
+      <div class="pkg-item"><span class="check">✓</span>1 revision round</div>
+      <div class="pkg-item"><span class="check">✓</span>PDF brand guide</div>
+    </div>
+    <div class="pkg featured">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <div class="pkg-name">Growth</div><span class="badge badge-info">Main pitch</span>
+      </div>
+      <div class="pkg-price">BWP 1,500 <span>/ month</span></div>
+      <div class="pkg-item"><span class="check">✓</span>Everything in Starter</div>
+      <div class="pkg-item"><span class="check">✓</span>Full brand identity system</div>
+      <div class="pkg-item"><span class="check">✓</span>3 social media posts designed/week</div>
+      <div class="pkg-item"><span class="check">✓</span>Business card + letterhead design</div>
+      <div class="pkg-item"><span class="check">✓</span>Monthly brand strategy call</div>
+      <div class="pkg-item"><span class="check">✓</span>3 revision rounds</div>
+    </div>
+    <div class="pkg">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <div class="pkg-name">Premium</div><span class="badge badge-success">Anchor high</span>
+      </div>
+      <div class="pkg-price">BWP 3,000 <span>/ month</span></div>
+      <div class="pkg-item"><span class="check">✓</span>Everything in Growth</div>
+      <div class="pkg-item"><span class="check">✓</span>Website design (5 pages)</div>
+      <div class="pkg-item"><span class="check">✓</span>Photography direction brief</div>
+      <div class="pkg-item"><span class="check">✓</span>Branded packaging concepts</div>
+      <div class="pkg-item"><span class="check">✓</span>Priority turnaround</div>
+    </div>
+    <div style="font-size:12px;color:var(--color-text-secondary);padding:8px 0">The Premium package makes 1,500 feel reasonable. Always mention it first, then say "most businesses our size start with Growth."</div>
+  </div>
+
+  <div id="tab-pitch" class="panel">
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:14px">A 5-step cold pitch script — tap each step to expand the talk track.</div>
+    <div id="pitch-steps"></div>
+  </div>
+
+  <div id="tab-plan" class="panel">
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:14px">From zero to 3 clients in 30 days — broken into weekly sprints.</div>
+    <div id="week-list"></div>
+  </div>
+
+  <div id="tab-objections" class="panel">
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:14px">The 6 objections you will hear. Tap each to see the response.</div>
+    <div id="obj-list"></div>
+  </div>
+</div>
+
+<script>
+let clients = [
+  {name:"Fashion client (current)", status:"Active", value:500, industry:"Fashion"}
+];
+
+try {
+  const savedClients = localStorage.getItem('businessStrategyClients');
+  if (savedClients) {
+    clients = JSON.parse(savedClients);
+  }
+} catch (e) {
+  console.error("Local storage error", e);
+}
+
+const industries = [
+  {name:"Food & Hospitality",badge:"info",reason:"Fastest-moving in Francistown. Restaurants, cafés, and event caterers are visual-first and income-generating. Easy to spot, easy to approach.",priority:"1st priority"},
+  {name:"Fashion & Retail",badge:"success",reason:"You already have a client here — that's a proof point. Use their results as a door-opener for every other fashion/retail conversation.",priority:"2nd priority"},
+  {name:"Professional Services",badge:"warn",reason:"Lawyers, consultants, and financial advisors pay well and retain long-term. Harder close but higher LTV. Target once you have 2 clients signed.",priority:"3rd priority"},
+  {name:"Health & Wellness",badge:"info",reason:"Salons, gyms, clinics, and nutritionists are image-conscious and often have no branding at all. High problem awareness.",priority:"4th priority"},
+  {name:"Events & Entertainment",badge:"warn",reason:"Project-based, not retainer. Good for portfolio but won't hit your monthly target. Use as a bonus.",priority:"Bonus — project-based"},
+  {name:"Real Estate & Property",badge:"danger",reason:"Longer sales cycles in Botswana. Agents and developers move slowly. Leave this for month 2+.",priority:"Month 2+"},
+];
+
+const pitchSteps = [
+  {num:"Step 01",title:"The hook (15 seconds)",color:"#185FA5",body:`"Hi, I'm Lungile — I run The Room Design Firm, a branding agency here in Francistown. I work with businesses like yours to make their brand look as good as their product actually is. Do you have 2 minutes?"\n\nKey: You're not asking permission to pitch — you're framing yourself as a peer solving a real problem.`},
+  {num:"Step 02",title:"The observation (30 seconds)",color:"#0F6E56",body:`Point to something specific: "I noticed your Instagram is a bit inconsistent with your in-store look — that kind of gap can cost you customers before they even walk through the door."\n\nResearch before you go. Know one real thing about their brand that could be stronger. This shows you're serious, not spamming.`},
+  {num:"Step 03",title:"The case study (60 seconds)",color:"#854F0B",body:`"I recently worked with a fashion brand in Francistown — I redesigned their visual identity and within 6 weeks they saw a [result]. I can show you what that looked like if you're interested."\n\nAlways have your portfolio on your phone, ready to show. If you don't have a result yet, show the before/after and say 'the client loved the new direction'.`},
+  {num:"Step 04",title:"The offer (30 seconds)",color:"#993C1D",body:`"I'd love to put together a free 20-minute brand audit for [Business Name] — no pitch, just a clear look at what's working and what's hurting you. If you like what you see, we can talk about working together."\n\nThe audit is your foot in the door. It's low-risk for them, high-value for you.`},
+  {num:"Step 05",title:"The close (15 seconds)",color:"#534AB7",body:`"What's the best way to reach you — WhatsApp or email? I'll send you 3 times I'm available this week."\n\nAlways leave with a specific next step. 'I'll be in touch' is not a close. A booked time is.`},
+];
+
+const weeks = [
+  {num:"Week 1",title:"Prepare & warm the market",tasks:"Finalise your portfolio (3-5 case studies). Set up a simple WhatsApp Business profile as a backup contact point. List 20 specific businesses in Food/Hospitality and Fashion. Research each one — check their Instagram, signage, vibe. Draft your pitch hook and practise it out loud 10 times."},
+  {num:"Week 2",title:"First 20 cold approaches",tasks:"Visit or DM 20 businesses from your list. Offer the free brand audit to every interested contact. Book at least 5 audit conversations. Send follow-up messages within 24 hours of every conversation. Goal: 2 booked audit calls by end of week."},
+  {num:"Week 3",title:"Convert audits to clients",tasks:"Run your 5 audit calls. Present findings + one Growth package proposal per call. Follow up twice within 5 days if no reply. Target: 1 new client signed at BWP 1,500. Add 10 more prospects from Professional Services."},
+  {num:"Week 4",title:"Close the final 2 clients",tasks:"Continue pitching from your expanded list. Leverage your new client as a fresh testimonial mid-pitch. Send a 'limited availability' message to warm leads who haven't responded. Goal: 2 more clients signed. Celebrate — you've hit the target."},
+];
+
+const objections = [
+  {q:"'We don't have the budget right now.'",a:`"I completely understand — that's exactly why I offer the Growth package at BWP 1,500, which is broken down into weekly deliverables. You're not paying a lump sum for a logo. You're paying for ongoing brand support that directly drives customers. Most clients find it pays for itself within the first month."`},
+  {q:"'We already have someone who does our social media.'",a:`"That's great — what I do is different. Social media posting and brand strategy are two separate things. I make sure that whatever gets posted actually looks consistent, professional, and builds your brand over time. We can work alongside whoever you have."`},
+  {q:"'I need to think about it.'",a:`"Of course. Can I ask — is there a specific part you want to think through? Because if it's the price or what's included, I can walk you through exactly what you get in 5 minutes, right now. I'd rather answer your questions than have you Google it."`},
+  {q:"'Can you show me examples of your work?'",a:`This is a buying signal, not an objection. Pull out your phone immediately. Walk them through 2 case studies. End with: "This is the kind of work I'd do for you." Never email the portfolio later — show it now while you have their attention.`},
+  {q:"'We tried branding before and it didn't work.'",a:`"I hear that a lot, and it usually comes down to one thing — the work was done once and never maintained. Branding isn't a logo, it's a system. What I do is build that system and keep it running. Can I show you what that actually looks like?"`},
+  {q:"'Why should I pay BWP 1,500 when I can get a logo for BWP 200 on Facebook?'",a:`"You absolutely can — and that gets you a logo. What I sell is a brand. The difference is: a logo is a file. A brand is the reason a customer chooses you over the shop next door. My clients pay for recognition, trust, and consistency — not just a graphic."`},
+];
+
+function renderClients(){
+  const el = document.getElementById('client-list');
+  let mrr = 0;
+  el.innerHTML = clients.map(c => {
+    mrr += c.value;
+    return `<div class="row"><div><div class="value">${c.name}</div><div class="label">${c.industry} · BWP ${c.value}/mo</div></div><span class="badge badge-${c.status==='Active'?'success':'warn'}">${c.status}</span></div>`;
+  }).join('');
+  document.getElementById('mrr').textContent = 'BWP '+mrr.toLocaleString();
+  document.getElementById('gap').textContent = 'BWP '+Math.max(0,5000-mrr).toLocaleString();
+  const pct = Math.round(Math.min(100,(mrr/4500)*100));
+  document.getElementById('progress-fill').style.width = pct+'%';
+  document.getElementById('progress-label').textContent = clients.length+' of 3 clients · BWP '+mrr+' of 4,500 target';
+}
+
+function addClient(){
+  const name = prompt('Client name:'); if(!name) return;
+  const industry = prompt('Industry:') || 'Other';
+  const value = parseInt(prompt('Monthly value (BWP):')) || 1500;
+  clients.push({name,status:'Active',value,industry});
+  try { localStorage.setItem('businessStrategyClients', JSON.stringify(clients)); } catch(e){}
+  renderClients();
+}
+
+function renderIndustries(){
+  document.getElementById('industry-list').innerHTML = industries.map(ind => `
+    <div class="industry-row">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <div class="industry-name">${ind.name}</div>
+        <span class="badge badge-${ind.badge}">${ind.priority}</span>
+      </div>
+      <div class="industry-meta">${ind.reason}</div>
+    </div>`).join('');
+}
+
+function renderPitch(){
+  document.getElementById('pitch-steps').innerHTML = pitchSteps.map((s,i) => `
+    <div class="pitch-step" style="border-left-color:${s.color}" onclick="toggleStep(${i})">
+      <div class="step-num" style="color:${s.color}">${s.num}</div>
+      <div class="step-title">${s.title} <span style="float:right;font-size:12px;color:var(--color-text-secondary)" id="arr-${i}">▸</span></div>
+      <div class="step-body" style="white-space:pre-line" id="step-${i}">${s.body}</div>
+    </div>`).join('');
+}
+
+function toggleStep(i){
+  const el = document.getElementById('step-'+i);
+  const arr = document.getElementById('arr-'+i);
+  const open = el.parentElement.classList.toggle('open');
+  arr.textContent = open ? '▾' : '▸';
+}
+
+function renderWeeks(){
+  document.getElementById('week-list').innerHTML = weeks.map(w => `
+    <div class="week-row">
+      <div class="week-num">${w.num}</div>
+      <div class="week-content">
+        <div class="week-title">${w.title}</div>
+        <div class="week-tasks">${w.tasks}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderObjections(){
+  document.getElementById('obj-list').innerHTML = objections.map((o,i) => `
+    <div class="objection" onclick="toggleObj(${i})">
+      <div class="obj-q">${o.q} <span id="oarr-${i}">▸</span></div>
+      <div class="obj-a" id="obj-${i}">${o.a}</div>
+    </div>`).join('');
+}
+
+function toggleObj(i){
+  const el = document.getElementById('obj-'+i);
+  const arr = document.getElementById('oarr-'+i);
+  const open = el.parentElement.classList.toggle('open');
+  arr.textContent = open ? '▾' : '▸';
+}
+
+function showTab(id, btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+renderClients();
+renderIndustries();
+renderPitch();
+renderWeeks();
+renderObjections();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js');
+  });
+}
+</script>
+</body>
+</html>
