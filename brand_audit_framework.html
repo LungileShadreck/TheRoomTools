@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Room Design Firm — Brand Audit Framework</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000000">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .progress-bar { height: 6px; border-radius: 3px; background: var(--color-background-secondary); margin-top: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; transition: width .3s, background .3s; }
+  .score-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin: 8px 0; }
+  .score-label { font-size: 13px; color: var(--color-text-secondary); flex: 1; }
+  .score-btns { display: flex; gap: 4px; }
+  .score-btn { width: 30px; height: 30px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--color-text-secondary); font-family: var(--font-sans); }
+  .score-btn.sel-1 { background: #FCEBEB; color: #A32D2D; border-color: #F09595; }
+  .score-btn.sel-2 { background: #FAEEDA; color: #633806; border-color: #EF9F27; }
+  .score-btn.sel-3 { background: #E6F1FB; color: #0C447C; border-color: #85B7EB; }
+  .score-btn.sel-4 { background: #EAF3DE; color: #27500A; border-color: #97C459; }
+  .score-btn.sel-5 { background: #E1F5EE; color: #085041; border-color: #5DCAA5; }
+  .check-item { padding: 8px 12px; border-radius: var(--border-radius-md); background: var(--color-background-secondary); margin-bottom: 6px; font-size: 13px; display: flex; gap: 10px; align-items: flex-start; cursor: pointer; user-select: none; }
+  .check-item.done { opacity: .55; text-decoration: line-through; }
+  .check-box { width: 16px; height: 16px; border-radius: 4px; border: 0.5px solid var(--color-border-primary); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; font-size: 11px; }
+  .check-item.done .check-box { background: var(--color-background-success); border-color: var(--color-border-success); color: var(--color-text-success); }
+  .script-block { border-left: 3px solid; padding: 10px 14px; border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; margin-bottom: 10px; background: var(--color-background-secondary); }
+  .script-label { font-size: 11px; font-weight: 500; margin-bottom: 4px; }
+  .script-text { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; white-space: pre-line; }
+  .total-score { font-size: 28px; font-weight: 500; }
+  .questions-list { list-style: none; }
+  .questions-list li { font-size: 13px; padding: 7px 0; border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); line-height: 1.5; }
+  .questions-list li:last-child { border-bottom: none; }
+  .q-num { font-weight: 500; color: var(--color-text-primary); margin-right: 6px; }
+</style>
+</head>
+<body>
+<div class="grain-overlay"></div>
+<div class="container">
+  <a href="index.html" class="back-link">← Back to Tools</a>
+  <h1>The Room Design Firm</h1>
+  <p class="subtitle">Brand audit framework — 20-minute call</p>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('structure',this)">Call structure</button>
+    <button class="tab" onclick="showTab('scorer',this)">Live scorer</button>
+    <button class="tab" onclick="showTab('questions',this)">Questions to ask</button>
+    <button class="tab" onclick="showTab('checklist',this)">Pre-audit prep</button>
+    <button class="tab" onclick="showTab('close',this)">The close</button>
+  </div>
+
+  <div id="tab-structure" class="panel active">
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:16px">Your 20 minutes, split precisely. Don't let any section run over — timing signals professionalism.</div>
+    <div id="structure-list"></div>
+  </div>
+
+  <div id="tab-scorer" class="panel">
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:16px">Score each category live during the call. Use this on your phone or laptop while you speak. Total out of 25.</div>
+    <div id="scorer-list"></div>
+    <div class="card" style="margin-top:4px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:4px">Total brand score</div>
+          <div class="total-score" id="total-score">0 / 25</div>
+        </div>
+        <div id="score-verdict" style="font-size:13px;color:var(--color-text-secondary);text-align:right;max-width:220px"></div>
+      </div>
+      <div class="progress-bar" style="margin-top:12px"><div class="progress-fill" id="total-bar" style="width:0%;background:var(--color-text-secondary)"></div></div>
+    </div>
+  </div>
+
+  <div id="tab-questions" class="panel">
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:16px">Ask these in the first 5 minutes. Their answers tell you exactly what to focus the audit on — and what pain to address in the close.</div>
+    <div id="questions-list"></div>
+  </div>
+
+  <div id="tab-checklist" class="panel">
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:16px">Do this research the night before the audit. Shows up in every sentence you say. Tap to check off.</div>
+    <div id="checklist-list"></div>
+  </div>
+
+  <div id="tab-close" class="panel">
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:16px">The last 5 minutes. This is where the BWP 1,500 either happens or doesn't. Follow this word-for-word the first few times.</div>
+    <div id="close-list"></div>
+  </div>
+</div>
+
+<script>
+const structure = [
+  {time:"Min 0–2",title:"Set the tone",color:"#185FA5",body:`Open with: "Thanks for making time — I want to make sure this is genuinely useful for you, so I'm going to be honest about what I see, good and bad. Sound fair?"\n\nThis does two things: signals you're not here to flatter them, and gives you permission to point out real problems.`},
+  {time:"Min 2–7",title:"Ask the 5 discovery questions",color:"#0F6E56",body:`Don't pitch yet. Ask questions and listen. Take notes visibly — it shows you're taking this seriously. The answers to these questions are the ammunition for your close. See the "Questions to ask" tab.`},
+  {time:"Min 7–15",title:"Run the 5-category audit",color:"#854F0B",body:`Walk through each of the 5 brand categories out loud. Use the Live Scorer tab. For each one, say what you see, what's working, and what the gap is costing them. Be specific — not "your logo could be better" but "your logo is using 3 different fonts which makes you look inconsistent to new customers."`},
+  {time:"Min 15–18",title:"Present the score",color:"#993C1D",body:`Show them the total score and say: "Based on what I've seen, [Business Name] scored [X] out of 25. That puts you in [category]. The biggest opportunities are in [top 2 weak areas]."\n\nA score makes the problem concrete and measurable. It also makes your solution feel like the logical next step.`},
+  {time:"Min 18–20",title:"The close",color:"#534AB7",body:`See the "Close" tab for the exact words. The key: don't ask "are you interested?" — ask "which works better for you, paying monthly or getting started this week?" Assume the sale, offer a choice.`},
+];
+
+const categories = [
+  {name:"Visual identity",desc:"Logo, colours, typography — do they feel intentional and consistent?"},
+  {name:"Social media presence",desc:"Profile quality, post consistency, visual coherence across platforms"},
+  {name:"In-store / physical brand",desc:"Signage, packaging, uniforms, environment — does it match the digital brand?"},
+  {name:"Brand voice & messaging",desc:"How they describe themselves — tagline, captions, about page"},
+  {name:"Competitor positioning",desc:"How do they look vs their 2–3 nearest competitors in Francistown?"},
+];
+
+const questions = [
+  {num:"Q1",text:"How do most of your new customers find you right now?"},
+  {num:"Q2",text:"When someone visits your Instagram or walks past your shop, what do you want them to feel?"},
+  {num:"Q3",text:"Who is your biggest local competitor, and honestly — how do you think you compare to them visually?"},
+  {num:"Q4",text:"Have you ever lost a customer or a deal because of how you looked, rather than what you offer?"},
+  {num:"Q5",text:"If your brand could do one thing better in the next 90 days, what would it be?"},
+];
+
+const checklist = [
+  "Follow their Instagram and look at the last 12 posts",
+  "Screenshot their profile photo, bio, and highlights",
+  "Visit their physical location or Google Street View it",
+  "Check if they have a website — and if so, how it looks on mobile",
+  "Find 2 local competitors and note how their brand compares",
+  "Write down one specific thing you'd change immediately",
+  "Prepare 2–3 ideas you could deliver in the first month",
+  "Have your portfolio open and ready on your phone",
+  "Know their price tier before you walk in — don't guess",
+];
+
+const closeScript = [
+  {color:"#185FA5",label:"Transition into the close",text:`"So based on everything we've looked at today — your score of [X]/25 and especially the gaps in [area 1] and [area 2] — I think The Room Design Firm can make a real difference here."`},
+  {color:"#0F6E56",label:"Present the Growth package (don't start with Starter)",text:`"What I'd propose is the Growth package — BWP 1,500 a month. That covers your full brand identity, 3 designed social posts a week, business card and letterhead, and a monthly strategy call with me. You'd see a difference in the first 30 days."`},
+  {color:"#854F0B",label:"Anchor with Premium first (then let them come down)",text:`"I also have a Premium package at BWP 3,000 that includes a website redesign and packaging concepts — but for where you are right now, Growth is where I'd start. Most businesses see the best ROI there."`},
+  {color:"#993C1D",label:"The assumptive close — offer a choice, not a yes/no",text:`"To get started, I just need a few details from you. Would you prefer to pay monthly by bank transfer, or would it be easier to set up at the start of the week?"`},
+  {color:"#534AB7",label:"If they hesitate — address it directly",text:`"What's the main thing on your mind? Is it the price, or what you'd actually get for it?" Then listen. Don't fill the silence. Their answer tells you exactly what to say next.`},
+  {color:"#3B6D11",label:"If they say yes",text:`"Perfect. Let me send you a simple one-page agreement on WhatsApp today, and we can start the discovery process this week. What's the best number to reach you on?"`},
+];
+
+let scores = {};
+const checked = new Set();
+try {
+  const savedScores = localStorage.getItem('brandAuditScores');
+  if (savedScores) scores = JSON.parse(savedScores);
+  const savedChecked = localStorage.getItem('brandAuditChecked');
+  if (savedChecked) JSON.parse(savedChecked).forEach(i => checked.add(i));
+} catch(e) {}
+
+function renderStructure(){
+  document.getElementById('structure-list').innerHTML = structure.map(s=>`
+    <div class="card" style="border-left:3px solid ${s.color};border-radius:0 var(--border-radius-lg) var(--border-radius-lg) 0">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div style="font-size:15px;font-weight:500">${s.title}</div>
+        <span class="badge badge-info">${s.time}</span>
+      </div>
+      <div style="font-size:13px;color:var(--color-text-secondary);line-height:1.6;white-space:pre-line">${s.body}</div>
+    </div>`).join('');
+}
+
+function renderScorer(){
+  document.getElementById('scorer-list').innerHTML = categories.map((c,i)=>`
+    <div class="card">
+      <div style="font-size:14px;font-weight:500;margin-bottom:2px">${c.name}</div>
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px">${c.desc}</div>
+      <div class="score-row">
+        <span class="score-label">Score</span>
+        <div class="score-btns">${[1,2,3,4,5].map(n=>`<button class="score-btn${scores[i]===n?' sel-'+n:''}" id="sb-${i}-${n}" onclick="setScore(${i},${n})">${n}</button>`).join('')}</div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="bar-${i}" style="width:0%;background:#888780"></div></div>
+    </div>`).join('');
+    
+  Object.keys(scores).forEach(cat => {
+    const val = scores[cat];
+    const barColors=['#E24B4A','#BA7517','#378ADD','#639922','#1D9E75'];
+    const bar = document.getElementById(`bar-${cat}`);
+    if (bar) {
+      bar.style.width=(val/5*100)+'%';
+      bar.style.background=barColors[val-1];
+    }
+  });
+  updateTotal();
+}
+
+function setScore(cat,val){
+  scores[cat]=val;
+  try { localStorage.setItem('brandAuditScores', JSON.stringify(scores)); } catch(e){}
+  [1,2,3,4,5].forEach(n=>{
+    const b=document.getElementById(`sb-${cat}-${n}`);
+    if(b) b.className='score-btn'+(n===val?` sel-${val}`:'');
+  });
+  const barColors=['#E24B4A','#BA7517','#378ADD','#639922','#1D9E75'];
+  document.getElementById(`bar-${cat}`).style.width=(val/5*100)+'%';
+  document.getElementById(`bar-${cat}`).style.background=barColors[val-1];
+  updateTotal();
+}
+
+function updateTotal(){
+  const total=Object.values(scores).reduce((a,b)=>a+b,0);
+  document.getElementById('total-score').textContent=total+' / 25';
+  const pct=Math.round((total/25)*100);
+  document.getElementById('total-bar').style.width=pct+'%';
+  const tc=['#E24B4A','#BA7517','#378ADD','#1D9E75'];
+  document.getElementById('total-bar').style.background=tc[total<=8?0:total<=14?1:total<=20?2:3];
+  const verdicts=[[0,8,"Brand largely undefined. High urgency — strong opportunity for The Room."],[9,14,"Some foundation, major gaps. Good entry point for Growth package."],[15,20,"Functional but inconsistent. Refinement will unlock growth."],[21,25,"Strong foundation. Premium package or strategy retainer is the pitch."]];
+  const v=verdicts.find(([lo,hi])=>total>=lo&&total<=hi);
+  document.getElementById('score-verdict').textContent=v?v[2]:'';
+}
+
+function renderQuestions(){
+  document.getElementById('questions-list').innerHTML=`<ul class="questions-list">${
+    questions.map(q=>`<li><span class="q-num">${q.num}</span>${q.text}</li>`).join('')
+  }</ul>`;
+}
+
+function renderChecklist(){
+  document.getElementById('checklist-list').innerHTML=checklist.map((item,i)=>`
+    <div class="check-item${checked.has(i)?' done':''}" onclick="toggleCheck(${i})">
+      <div class="check-box">${checked.has(i)?'✓':''}</div>
+      <span>${item}</span>
+    </div>`).join('');
+}
+
+function toggleCheck(i){
+  checked.has(i)?checked.delete(i):checked.add(i);
+  try { localStorage.setItem('brandAuditChecked', JSON.stringify(Array.from(checked))); } catch(e){}
+  renderChecklist();
+}
+
+function renderClose(){
+  document.getElementById('close-list').innerHTML=closeScript.map(s=>`
+    <div class="script-block" style="border-left-color:${s.color}">
+      <div class="script-label" style="color:${s.color}">${s.label}</div>
+      <div class="script-text">${s.text}</div>
+    </div>`).join('');
+}
+
+function showTab(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+renderStructure(); renderScorer(); renderQuestions(); renderChecklist(); renderClose();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js');
+  });
+}
+</script>
+</body>
+</html>
