@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
 
 :root {
-  /* Premium Palette (Light Mode) */
-  --ink: #0e0d0b;
-  --ink-2: #3a3834;
-  --ink-3: #7a786f;
-  --paper: #f7f5f0;
-  --paper-2: #efede6;
-  --paper-3: #e5e2d8;
-  --gold: #b8903a;
-  --gold-light: #f0e4c4;
+  /* Premium Palette (Green on Black) */
+  --ink: #f0fdf4;
+  --ink-2: #bbf7d0;
+  --ink-3: #4ade80;
+  --paper: #000000;
+  --paper-2: #051409;
+  --paper-3: #0a2512;
+  --gold: #4ade80;
+  --gold-light: #22c55e;
 
   /* Functional Map */
   --color-background-primary: var(--paper);
@@ -21,26 +21,26 @@
   --color-text-tertiary: var(--ink-3);
 
   /* Borders */
-  --color-border-tertiary: rgba(14,13,11,0.12);
-  --color-border-secondary: rgba(14,13,11,0.22);
-  --color-border-primary: rgba(14,13,11,0.35);
+  --color-border-tertiary: rgba(74, 222, 128, 0.12);
+  --color-border-secondary: rgba(74, 222, 128, 0.22);
+  --color-border-primary: rgba(74, 222, 128, 0.35);
 
   /* Status Colors */
-  --color-background-info: #e6f1fb;
-  --color-text-info: #0c447c;
-  --color-border-info: #85b7eb;
+  --color-background-info: #022c22;
+  --color-text-info: #34d399;
+  --color-border-info: #059669;
 
-  --color-background-success: #eaf3de;
-  --color-text-success: #27500a;
-  --color-border-success: #97c459;
+  --color-background-success: #064e3b;
+  --color-text-success: #4ade80;
+  --color-border-success: #16a34a;
 
-  --color-background-warning: #faeeda;
-  --color-text-warning: #633806;
-  --color-border-warning: #ef9f27;
+  --color-background-warning: #422006;
+  --color-text-warning: #fbbf24;
+  --color-border-warning: #d97706;
 
-  --color-background-danger: #fcebeb;
-  --color-text-danger: #791f1f;
-  --color-border-danger: #f09595;
+  --color-background-danger: #450a0a;
+  --color-text-danger: #f87171;
+  --color-border-danger: #dc2626;
 
   --border-radius-md: 8px;
   --border-radius-lg: 12px;
@@ -49,43 +49,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --ink: #e8e6de;
-    --ink-2: #b4b2a9;
-    --ink-3: #888780;
-    --paper: #1e1e1c;
-    --paper-2: #2a2a27;
-    --paper-3: #242422;
-    --gold: #fac775;
-
-    --color-background-primary: var(--paper);
-    --color-background-secondary: var(--paper-2);
-    --color-background-tertiary: var(--paper-3);
-    
-    --color-text-primary: var(--ink);
-    --color-text-secondary: var(--ink-2);
-    --color-text-tertiary: var(--ink-3);
-
-    --color-border-tertiary: rgba(255,255,255,0.1);
-    --color-border-secondary: rgba(255,255,255,0.2);
-    --color-border-primary: rgba(255,255,255,0.32);
-
-    --color-background-info: #042c53;
-    --color-text-info: #b5d4f4;
-    --color-border-info: #185fa5;
-
-    --color-background-success: #173404;
-    --color-text-success: #c0dd97;
-    --color-border-success: #3b6d11;
-
-    --color-background-warning: #412402;
-    --color-text-warning: #fac775;
-    --color-border-warning: #854f0b;
-
-    --color-background-danger: #501313;
-    --color-text-danger: #f7c1c1;
-    --color-border-danger: #a32d2d;
-  }
+  /* Theme is globally dark */
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
